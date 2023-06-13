@@ -14,7 +14,7 @@ class PersistentSocket {
   }) {
     _outputCtrl = StreamController<Uint8List>(
       onListen: _listen,
-      onCancel: _cancel,
+      onCancel: close,
     );
   }
 
@@ -50,12 +50,6 @@ class PersistentSocket {
   Stream<Uint8List> get stream => _outputCtrl.stream;
 
   Future<void> _listen() async => _socket ??= await _reconnect(maxRetries);
-
-  void _cancel() {
-    _outputCtrl.close();
-    _socket?.close();
-    _socket = null;
-  }
 
   /// Sends [string] to the socket.
   Future<void> sendString(
@@ -107,5 +101,12 @@ class PersistentSocket {
     }
 
     return null;
+  }
+
+  /// Closes the socket.
+  void close() {
+    _outputCtrl.close();
+    _socket?.close();
+    _socket = null;
   }
 }
