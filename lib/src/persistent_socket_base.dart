@@ -49,7 +49,14 @@ class PersistentSocket {
 
   Stream<Uint8List> get stream => _outputCtrl.stream;
 
-  Future<void> _listen() async => _socket ??= await _reconnect(maxRetries);
+  Future<void> _listen() async {
+    _socket ??= await _reconnect(maxRetries);
+    _socket?.listen(
+      _outputCtrl.add,
+      onError: _outputCtrl.addError,
+      onDone: _outputCtrl.close,
+    );
+  }
 
   /// Sends [string] to the socket.
   Future<void> sendString(
