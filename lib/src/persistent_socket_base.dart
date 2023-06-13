@@ -78,7 +78,7 @@ class PersistentSocket {
     /// If connection fails, send will throw an exception.
     bool reconnect = false,
   }) async {
-    if (reconnect) await _listen();
+    if (_socket == null && reconnect) await _listen();
     if (_socket == null) throw Exception('Socket is not connected');
     _socket?.add(data);
   }
