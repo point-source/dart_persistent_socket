@@ -57,6 +57,18 @@ class PersistentSocket {
     _socket = null;
   }
 
+  /// Sends [string] to the socket.
+  Future<void> sendString(
+    /// The string to send.
+    String string, {
+    /// Whether to reconnect if the socket is not connected.
+    ///
+    /// If connection fails, send will throw an exception.
+    bool reconnect = false,
+  }) async =>
+      send(Uint8List.fromList(string.codeUnits), reconnect: reconnect);
+
+  /// Sends [data] to the socket.
   Future<void> send(
     /// The data to send.
     Uint8List data, {
